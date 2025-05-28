@@ -133,4 +133,6 @@ UPI QR code and "Pay Now" button
 
 Feedback Form link
 
+[for script code request to this email : madannayak23062004@gmail.com]
+
 MIT License © 2025 Madan R
