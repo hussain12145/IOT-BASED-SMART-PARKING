@@ -111,9 +111,9 @@ Logs feedback responses
 
 Google Sheets Setup
 
-Log Sheet ID: 1ofg-9cGfbXVbg6lBfyV7jPrZTjW7zlyWq6PX1yma6h8
+Log Sheet ID: 1ofg-9cGfbXVbg6lBfyV7j*****************
 
-Feedback Sheet ID: 14PausWOSExNV0K8o5F5wwWRwKpFVMHOlCWBwVvg0aBw
+Feedback Sheet ID: 14PausWOSExNV0K8o*****************
 
 Sheet Names: Logs, Feedback, etc.
 
