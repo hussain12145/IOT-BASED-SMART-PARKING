@@ -150,6 +150,6 @@ project image:
 [![Watch Video](https://img.icons8.com/color/96/youtube-play.png)](https://drive.google.com/file/d/10fCxwIr7GQCxG0gdvVvFNceyp6BNLXks/view?usp=drive_link)
 
 
-for know RFID CARD ID use this : https://github.com/Madannayak003/RFID_UID-ARDUINO
+for knowing RFID CARD ID use this : https://github.com/Madannayak003/RFID_UID-ARDUINO
 
 MIT License © 2025 Madan R
