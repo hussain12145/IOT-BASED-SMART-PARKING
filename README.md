@@ -146,7 +146,6 @@ project image:
 ![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/36fd43a7e48c4cca31b172fe9532ad7bb446c744/project-structure.jpeg)
 
 📽️ Watch Demo Video:
-
 [![Watch Video](https://img.icons8.com/color/96/youtube-play.png)](https://drive.google.com/file/d/10fCxwIr7GQCxG0gdvVvFNceyp6BNLXks/view?usp=drive_link)
 
 [📽️ Watch Demo Video](https://drive.google.com/file/d/10fCxwIr7GQCxG0gdvVvFNceyp6BNLXks/view?usp=drive_link)
