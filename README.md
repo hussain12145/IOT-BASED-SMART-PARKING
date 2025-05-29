@@ -131,9 +131,16 @@ PDF Receipt with UID, Entry Time, Exit Time, Duration, Charge (Rs. 50/10 min) UP
 
 ![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/36fd43a7e48c4cca31b172fe9532ad7bb446c744/entry-exit-ticket.jpeg)
 
-project:
+Thank you Email with feedback and payment confirm:
+![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/ce9e93f16c22ae97b4e38d72159a03016cac4adb/thank%20you%20mail.jpeg)
+
+feedback form :
+![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/36fd43a7e48c4cca31b172fe9532ad7bb446c744/feedback-form.jpeg)
+
+project image:
 
 ![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/36fd43a7e48c4cca31b172fe9532ad7bb446c744/project-structure.jpeg)
+
 
 [for script code request to this email : madannayak23062004@gmail.com]
 
