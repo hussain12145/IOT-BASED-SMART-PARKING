@@ -1,0 +1,342 @@
+function doGet(e) { 
+  try {
+    var uid = e.parameter.uid;
+    var type = e.parameter.type;
+    var availableSlots = e.parameter.availableSlots;
+    var assignedSlot = e.parameter.assignedSlot;
+
+    var timeZone = "Asia/Kolkata";
+    var timestamp = Utilities.formatDate(new Date(), timeZone, "dd-MM-yyyy hh:mm:ss a");
+
+    var uidEmailMap = {
+      "E38839DA": "***********@gmail.com",
+      "DE67E056": "***********@gmail.com"
+    };
+
+    var ownerEmail = uidEmailMap[uid] || "";
+    var sheet = SpreadsheetApp.openById("RAPLACE YOUR SHEET ID").getActiveSheet();
+    var amount = "";
+    var durationText = "";
+    var entryTimeFormatted = "";
+
+    if (type === 'ENTRY') {
+      var props = PropertiesService.getScriptProperties();
+      props.setProperty(uid + "_entry", new Date().toISOString());
+      sheet.appendRow([uid, type, availableSlots, assignedSlot, timestamp, ownerEmail, "", ""]);
+
+      var html = `
+        <html>
+        <head>
+          <style>
+            body {
+              font-family: Arial;
+              padding: 20px;
+              background: linear-gradient(135deg, #2c3e50, #4ca1af);
+              color: #000;
+            }
+            .container {
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 15px;
+              padding: 20px;
+              backdrop-filter: blur(10px);
+              box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+              color: #000;
+            }
+            h2 {
+              color: #000;
+              text-align: center;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 20px;
+              color: #000;
+            }
+            td, th {
+              border: 1px solid rgba(0, 0, 0, 0.2);
+              padding: 10px;
+            }
+            th {
+              background-color: rgba(255, 255, 255, 0.2);
+            }
+            .footer {
+              margin-top: 30px;
+              padding: 15px;
+              background-color: rgba(255, 255, 255, 0.2);
+              color: #000;
+              text-align: center;
+              font-size: 16px;
+              border-radius: 10px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h2>Smart Parking Entry Ticket</h2>
+            <table>
+              <tr><th>UID</th><td>${uid}</td></tr>
+              <tr><th>Entry Time</th><td>${timestamp}</td></tr>
+              <tr><th>Slot No.</th><td>${assignedSlot}</td></tr>
+            </table>
+            <div class="footer">
+              WELCOME TO OUR SMART PARKING!
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+
+      var blob = Utilities.newBlob(HtmlService.createHtmlOutput(html).getContent(), 'text/html', 'entry_ticket.html')
+                          .getAs('application/pdf')
+                          .setName("Entry_Ticket.pdf");
+
+      MailApp.sendEmail({
+        to: ownerEmail,
+        subject: `Smart Parking - ENTRY Ticket for UID: ${uid}`,
+        body: `Hello,\n\nWelcome! Your car has entered the parking lot.\n\nYour entry ticket is attached.\n\n- Smart Parking System`,
+        attachments: [blob]
+      });
+
+    } else if (type === 'EXIT') {
+      var props = PropertiesService.getScriptProperties();
+      var entryTimeStr = props.getProperty(uid + "_entry");
+
+      if (entryTimeStr) {
+        var entryDate = new Date(entryTimeStr);
+        var exitDate = new Date();
+        var durationMs = exitDate - entryDate;
+        var minutesParked = Math.ceil(durationMs / (1000 * 60));
+        durationText = minutesParked + " minutes";
+
+        var chargeUnits = Math.ceil(minutesParked / 2);
+        var charge = chargeUnits * 10;
+        amount = "₹" + charge;
+        entryTimeFormatted = Utilities.formatDate(entryDate, timeZone, "yyyy-MM-dd hh:mm:ss a");
+
+        props.deleteProperty(uid + "_entry");
+        sheet.appendRow([uid, type, availableSlots, assignedSlot, timestamp, ownerEmail, durationText, amount]);
+
+        var upiLink = `upi://pay?pa=000000000@ybl&pn=Smart%20Parking&am=${charge}&cu=INR`; ```REPLACE UPI ID ```
+        var encodedUpiLink = encodeURIComponent(upiLink);
+        var qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedUpiLink}`;
+
+        var qrBlob = UrlFetchApp.fetch(qrUrl).getBlob();
+        var qrBase64 = Utilities.base64Encode(qrBlob.getBytes());
+
+        var html = `
+          <html>
+          <head>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+                background: linear-gradient(135deg, #2c3e50, #4ca1af);
+                color: #000;
+              }
+              .container {
+                background: rgba(255, 255, 255, 0.25);
+                border-radius: 15px;
+                padding: 20px;
+                backdrop-filter: blur(12px);
+                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+                color: #000;
+              }
+              h2, h3 {
+                color: #000;
+                text-align: center;
+              }
+              table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                color: #000;
+              }
+              td, th {
+                border: 1px solid rgba(0,0,0,0.2);
+                padding: 10px;
+              }
+              th {
+                background-color: rgba(255, 255, 255, 0.3);
+              }
+              .pay-section {
+                margin-top: 30px;
+                text-align: center;
+                color: #000;
+              }
+              .pay-section img {
+                margin-top: 10px;
+                border: 1px solid rgba(0,0,0,0.2);
+                padding: 5px;
+                border-radius: 10px;
+              }
+              .footer {
+                margin-top: 30px;
+                padding: 15px;
+                background-color: rgba(255, 255, 255, 0.2);
+                color: #000;
+                text-align: center;
+                font-size: 16px;
+                border-radius: 10px;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h2>Smart Parking Receipt</h2>
+              <table>
+                <tr><th>UID</th><td>${uid}</td></tr>
+                <tr><th>Entry Time</th><td>${entryTimeFormatted}</td></tr>
+                <tr><th>Exit Time</th><td>${timestamp}</td></tr>
+                <tr><th>Duration</th><td>${durationText}</td></tr>
+                <tr><th>Slot No.</th><td>${assignedSlot}</td></tr>
+                <tr><th>Amount</th><td>${amount}</td></tr>
+              </table>
+
+              <div class="pay-section">
+                <h3>Pay Now</h3>
+                <p>Scan the UPI QR below or use the UPI ID manually:</p>
+                <img src="data:image/png;base64,${qrBase64}" alt="UPI QR Code" width="200" height="200" />
+                <p style="margin-top: 15px;">
+                  <strong>UPI ID:</strong> 00000000000@ybl<br/> ```REPLACE UPI ID ```
+                  <strong>Amount:</strong> ₹${charge}<br/>
+                  <em>Use any UPI app to scan or enter the UPI ID to pay.</em>
+                </p>
+              </div>
+
+              <div class="footer">
+                Thank you for using Smart Parking. Have a safe journey!
+              </div>
+            </div>
+          </body>
+          </html>
+        `;
+
+        var blob = Utilities.newBlob(HtmlService.createHtmlOutput(html).getContent(), 'text/html', 'receipt.html')
+                            .getAs('application/pdf')
+                            .setName("Parking_Receipt.pdf");
+
+        MailApp.sendEmail({
+          to: ownerEmail,
+          subject: `Smart Parking - EXIT Receipt for UID: ${uid}`,
+          body: `Hello,\n\nThanks! Your car has exited the parking lot.\n\nYour parking receipt is attached.\n\n- Smart Parking System`,
+          attachments: [blob]
+        });
+
+        Utilities.sleep(20000);
+
+        MailApp.sendEmail({
+          to: ownerEmail,
+          subject: "Thank You for Parking With Us!",
+          htmlBody: `
+            <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f7f7f7; border-radius: 10px; text-align: center;">
+              <h2 style="color: #2c3e50;">Thank You for Visiting!</h2>
+              <p style="font-size: 16px; color: #444;">We truly appreciate your trust in our Smart Parking service.</p>
+              <p style="font-size: 16px; color: #444;">Have a great day, and we hope to see you again soon!</p>
+              
+              <div style="text-align: center; margin-top: 20px;">
+                   <a href="https://script.google.com/macros/s/AKfycbyxjWjgaDtnxfSdyQGxpTce3YDwi7DMfxfzmYM9Ld8xSJeQwnKneiesqlS2SUmaQbry/exec?uid=${uid}&type=PAYMENT" 
+                   style="display: inline-block; background-color: #2c3e50; color: white; padding: 12px 24px; font-size: 18px; border-radius: 25px; text-decoration: none;">
+                  Confirm Payment 
+                </a>
+              </div>
+
+              <div style="margin: 30px 0;">
+                <a href="https://script.google.com/macros/s/<<<<< REPLACE FEEDBACK DEPLOY ID >>>>>/exec?uid=${uid}" 
+                  style="display: inline-block; background-color: #2c3e50; color: white; padding: 12px 24px; border-radius: 25px; font-size: 18px; text-decoration: none;">
+                  Leave Feedback
+                </a>
+              </div>
+            
+              <div style="margin-top: 30px;">
+                <span style="display: inline-block; background-color: #2c3e50; color: white; padding: 12px 24px; border-radius: 25px; font-size: 18px;">Thank You!</span>
+              </div>
+            </div>
+          `
+        });
+
+      } else {
+        sheet.appendRow([uid, type, availableSlots, assignedSlot, timestamp, ownerEmail, "Not found", ""]);
+      }
+    } else if (type === 'PAYMENT') {
+      var uid = e.parameter.uid;
+      var sheet = SpreadsheetApp.openById("<<<<<<<RAPLACE YOU SHEET ID HERE>>>>>>>").getActiveSheet();
+      var data = sheet.getDataRange().getValues();
+
+      // Find the latest EXIT row for this UID
+      for (var i = data.length - 1; i >= 0; i--) {
+        if (data[i][0] == uid && data[i][1] == "EXIT") {
+          sheet.getRange(i + 1, 9).setValue("Paid ✅");
+          sheet.getRange(i + 1, 10).setValue(""); // Clear Unpaid
+          break;
+        }
+      }
+
+      // Return a simple thank you page
+    return HtmlService.createHtmlOutput(`
+    <html>
+      <head>
+        <title>Smart Parking - Payment Successful</title>
+        <style>
+          body {
+            margin: 0;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          .glass {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            text-align: center;
+            color: white;
+            width: 90%;
+            max-width: 400px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+          }
+          @keyframes fadeInUp {
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          .done-btn {
+            background-color: #43a047;
+            color: white;
+            padding: 14px 28px;
+            font-size: 18px;
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+          }
+          .done-btn:hover {
+            background-color: #388e3c;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="glass">
+          <h2>Payment Successful 🎉</h2>
+          <p>Thank you for completing the payment.</p>
+          <a href="#" class="done-btn">Payment Done</a>
+        </div>
+      </body>
+    </html>
+  `);
+}
+
+    return ContentService.createTextOutput("Success: Data logged and email sent if applicable.");
+  } catch (error) {
+    return ContentService.createTextOutput("Error: " + error.message);
+  }
+}
