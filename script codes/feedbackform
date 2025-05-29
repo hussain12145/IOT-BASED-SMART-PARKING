@@ -1,0 +1,215 @@
+code.gs 													                
+
+function doGet(e) {
+  return HtmlService.createHtmlOutputFromFile('FeedbackForm');
+}
+
+function submitFeedback(data) {
+  const sheetId = "RELACE SHEET ID";
+  const sheet = SpreadsheetApp.openById(sheetId).getActiveSheet();
+
+  sheet.appendRow([
+    new Date(),
+    data.uid,
+    data.rating,
+    data.comments
+  ]);
+
+  return "Feedback received successfully!";
+}function submitFeedback(data) {
+  const sheetId = "REPLACE SAME ABOVE SHEET ID";
+  const sheet = SpreadsheetApp.openById(sheetId).getActiveSheet();
+
+  const timestamp = Utilities.formatDate(new Date(), "Asia/Kolkata", "dd-MM-yyyy hh:mm:ss a");
+
+  sheet.appendRow([
+    timestamp,
+    data.uid,
+    data.rating,
+    data.email,
+    data.comments
+  ]);
+
+  // Send confirmation email
+  MailApp.sendEmail({
+    to: data.email,
+    subject: "✅ Feedback Received - Smart Parking",
+    body: `Hello,\n\nThank you for your feedback!\n\nTime: ${timestamp}\nRating: ${data.rating}\nComments: ${data.comments || "No comments"}\n\n- Smart Parking System`
+  });
+
+  return "Feedback received successfully!";
+}
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+FeedbackForm.html
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+      * {
+        box-sizing: border-box;
+      }
+
+     body {
+    font-family: 'Poppins', sans-serif;
+    background: url('https://i.imgur.com/MtKApKN.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    }
+
+      .background {
+       position: fixed;
+       width: 100%;
+       height: 100%;
+       z-index: -1;
+      }
+
+      .form-container {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        width: 400px;
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #00ffcc;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #ffffff;
+      }
+
+      input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 12px;
+        background: #2c2c2c;
+        color: #00ffcc;
+        font-size: 15px;
+        transition: all 0.3s ease;
+      }
+
+      input:focus, textarea:focus, select:focus {
+        outline: none;
+        box-shadow: 0 0 8px #00ffcc;
+        background: #1f1f1f;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        background: #00ffcc;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        color: #000;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      button:hover {
+        background: #00e6b8;
+      }
+      
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: -1;
+      }
+  
+      #thankYou {
+        text-align: center;
+        font-size: 18px;
+        margin-top: 20px;
+        color: #00ffcc;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background">
+      <img src="https://i.imgur.com/MtKApKN.jpg" 
+       alt="Background" 
+       style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2;">
+    </div>
+
+    <div class="overlay"></div>
+    <div class="form-container">
+      <h2>🚗 SMART PARKING FEEDBACK</h2>
+      <form id="feedbackForm">
+        <label for="uid">Vehicle UID</label>
+        <input type="text" name="uid" id="uid" placeholder="Enter UID" required>
+
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="you@example.com" required>
+
+        <label for="rating">Rating</label>
+        <select name="rating" id="rating" required>
+          <option value="">Select Stars</option>
+          <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+          <option value="4">⭐⭐⭐⭐ Good</option>
+          <option value="3">⭐⭐⭐ Average</option>
+          <option value="2">⭐⭐ Poor</option>
+          <option value="1">⭐ Very Poor</option>
+        </select>
+
+        <label for="comments">Comments</label>
+        <textarea name="comments" id="comments" rows="4" placeholder="Share your experience..." required></textarea>
+
+        <button type="submit">Submit Feedback</button>
+      </form>
+      <div id="thankYou">🎉 Thank you for your feedback!</div>
+    </div>
+
+    <script>
+      const form = document.getElementById("feedbackForm");
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const data = {
+          uid: form.uid.value,
+          email: form.email.value,
+          rating: form.rating.value,
+          comments: form.comments.value
+        };
+
+        google.script.run.withSuccessHandler((msg) => {
+          form.style.display = "none";
+          const thankYou = document.getElementById("thankYou");
+          thankYou.textContent = "🎉 " + msg;
+          thankYou.style.display = "block";
+        }).submitFeedback(data);
+      });
+    </script>
+  </body>
+</html>
