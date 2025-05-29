@@ -131,8 +131,6 @@ PDF Receipt with UID, Entry Time, Exit Time, Duration, Charge (Rs. 50/10 min)
 
 UPI QR code 
 
-![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/5d25ee585827dd1edc79a3eab401f2586feac0f3/Circuit/entry-exit-ticket.jpeg)
-
 [for script code request to this email : madannayak23062004@gmail.com]
 
 for know RFID CARD ID use this : https://github.com/Madannayak003/RFID_UID-ARDUINO
