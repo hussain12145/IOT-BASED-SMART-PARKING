@@ -121,15 +121,19 @@ Sheet Names: Logs, Feedback, etc.
 Email Output
 Entry Email:
 
-PDF Ticket with UID, Entry Time, Slot, QR
+PDF Ticket with UID, Entry Time, Slot,
 
 "Welcome" message
 
 Exit Email:
 
-PDF Receipt with UID, Entry Time, Exit Time, Duration, Charge (Rs. 50/10 min)
+PDF Receipt with UID, Entry Time, Exit Time, Duration, Charge (Rs. 50/10 min) UPI QR code 
 
-UPI QR code 
+![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/36fd43a7e48c4cca31b172fe9532ad7bb446c744/entry-exit-ticket.jpeg)
+
+project:
+
+![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/36fd43a7e48c4cca31b172fe9532ad7bb446c744/project-structure.jpeg)
 
 [for script code request to this email : madannayak23062004@gmail.com]
 
