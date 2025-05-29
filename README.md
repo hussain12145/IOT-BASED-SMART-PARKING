@@ -135,4 +135,6 @@ Feedback Form link
 
 [for script code request to this email : madannayak23062004@gmail.com]
 
+for know RFID CARD ID use this : https://github.com/Madannayak003/RFID_UID-ARDUINO
+
 MIT License © 2025 Madan R
