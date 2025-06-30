@@ -1,157 +1,117 @@
-# IOT-BASED-SMART-PARKING
-🚗 RFID Smart Parking System with Arduino UNO
+# IOT-BASED-SMART-PARKING 🚗
 
-Created by Madan R
-Date: 18/05/2025
+![GitHub release](https://img.shields.io/github/release/hussain12145/IOT-BASED-SMART-PARKING.svg)
 
-📋 Project Overview
-This project is an RFID-based Smart Parking System using Arduino UNO. It integrates:
+## Project Overview
 
-RFID (MFRC522) for user authentication,
+This project is an RFID-based Smart Parking System using Arduino UNO. It integrates several components to create an efficient and user-friendly parking solution. The system uses RFID technology for user authentication, sensors for detecting vehicle presence, and cloud communication for data management.
 
-IR sensors for slot occupancy detection,
+### Features
 
-Ultrasonic sensors for vehicle detection at entry and exit,
+- **RFID Authentication**: Uses MFRC522 RFID module for secure user identification.
+- **Slot Occupancy Detection**: Employs IR sensors to monitor parking slot availability.
+- **Vehicle Detection**: Utilizes ultrasonic sensors to detect vehicles at entry and exit points.
+- **Gate Control**: Controls entry and exit gates with servo motors.
+- **Cloud Data Management**: Connects to the internet via ESP8266 to upload parking data to Google Sheets.
+- **User Feedback**: Provides real-time feedback through LEDs and buzzers.
 
-Servo motors for gate control,
+## Hardware Components
 
-ESP8266 for uploading data to the cloud (e.g., Google Sheets via Apps Script),
+| Component              | Quantity | Description                                  |
+|-----------------------|----------|----------------------------------------------|
+| Arduino UNO           | 1        | Main controller for the system               |
+| MFRC522 RFID          | 1        | For scanning RFID tags                        |
+| Servo Motor           | 2        | For entry and exit gates                     |
+| HC-SR04               | 2        | For vehicle detection at entry and exit      |
+| IR Sensors            | 3        | For detecting slot availability               |
+| ESP8266 (NodeMCU)     | 1        | For cloud communication                       |
 
-LEDs and Buzzer for feedback.
+## Getting Started
 
-[Hardware Components]
+To set up the IOT-BASED-SMART-PARKING system, follow these steps:
 
-Component	              Quantity	               Description
-Arduino UNO	              1                  	Main controller
-MFRC522 RFID	             1                  	For scanning RFID tags
-Servo Motor	              2                   For entry and exit gates
-HC-SR04	                  2                   Entry and exit vehicle detection
-IR Sensors	               3                   For detecting slot availability
-ESP8266 (e.g.,NodeMCU) 	  1	                  For cloud communication via SoftwareSerial
-LEDs	                     2	                  Green (access granted), Red (denied)
-Buzzer	                   1	                  Sound alert for denial
-Power Supply              1                	  5V regulated power supply
+### Prerequisites
 
+- **Arduino IDE**: Download and install the Arduino IDE from [Arduino's official website](https://www.arduino.cc/en/software).
+- **Hardware**: Gather all the components listed above.
+- **Libraries**: Install necessary libraries for RFID, ultrasonic sensors, and ESP8266 in the Arduino IDE.
 
-[Pin Configuration]
- 
-Purpose	                             Pin
-RFID SS (SDA)                        D10
-RFID RST	                            D9
-IR Sensor Slot 1	                    A0
-IR Sensor Slot 2	                    A1
-IR Sensor Slot 3                    	A2
-Red LED + Buzzer                    	A3
-Green LED                            D2
-Entry Ultrasonic Trig	               D7
-Entry Ultrasonic Echo            	   D8
-Exit Ultrasonic Trig	                D4
-Exit Ultrasonic Echo	                D3
-Entry Servo                      	   D5
-Exit Servo	                          D6
-ESP8266 RX, TX	                      A4 (RX), A5 (TX) – SoftwareSerial
+### Installation
 
-[How It Works]
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/hussain12145/IOT-BASED-SMART-PARKING.git
+   cd IOT-BASED-SMART-PARKING
+   ```
 
-1. RFID Scan: When a vehicle is at the gate, the driver scans their RFID card.
+2. **Upload the Code**:
+   Open the Arduino IDE and load the main code file from the repository. Select the correct board and port, then upload the code to the Arduino UNO.
 
-2. Validation: UID is checked against a list of authorized cards.
+3. **Connect Hardware**:
+   Follow the schematic provided in the repository to connect all hardware components correctly.
 
-3. Vehicle Detection:
+4. **Set Up Cloud Communication**:
+   Configure the ESP8266 settings to connect to your Wi-Fi network. Update the Google Sheets API key and other necessary parameters in the code.
 
-     If at Entry and authorized → check if slots are available.
+5. **Test the System**:
+   Power up the system and test the RFID authentication, vehicle detection, and cloud data upload functionalities.
 
-     If at Exit and authorized → verify if UID was previously registered (i.e., the car entered).
+### Using the System
 
-4. Slot Assignment: An available slot (via IR sensors) is assigned.
+- **Parking a Vehicle**: Scan the RFID tag at the entry gate. The system will check slot availability and open the gate if a slot is free.
+- **Exiting the Parking**: Scan the RFID tag at the exit gate. The system will update the slot availability and open the gate.
 
-5. Gate Control: Gates are opened/closed using servo motors.
+## Releases
 
-6. ESP Communication: Status (ENTRY or EXIT), UID, available slots, and assigned slot are sent to ESP8266 via SoftwareSerial.
+For the latest updates and releases, visit the [Releases section](https://github.com/hussain12145/IOT-BASED-SMART-PARKING/releases). You can download the latest version of the code and any additional resources needed to run the system.
 
-7. Feedback: LEDs and buzzer indicate success/failure visually and audibly.
+## Topics
 
-[##Notes]
-Distance for car detection: < 5cm from the ultrasonic sensor.
+This project covers various topics related to IoT and smart parking solutions. Some of the key topics include:
 
-Empty slot logic: IR sensor returns HIGH when the slot is empty.
+- arduino-uno
+- authorizer
+- automated-parking
+- car
+- electric-vehicles
+- esp8266
+- futures-ideas
+- innovation
+- iot-automation
+- madan-smartparking2025
+- parking2025
+- safe-settings
+- security
+- smart-parking-iot
+- smartparking
+- ticketing-system
+- vehicle-monitoring
 
-Gate movement: Smooth 0° ↔ 90° transition using servo.
+## Contributing
 
-##Setup Instructions
- 
-Connect all components as per the pin configuration.
+Contributions are welcome! If you have suggestions for improvements or new features, please open an issue or submit a pull request.
 
-Replace validUIDs[] with your RFID card UIDs.
+### How to Contribute
 
-Upload the code to the Arduino UNO.
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push to your branch.
+5. Open a pull request.
 
-Power the system and monitor the Serial output.
+## Acknowledgments
 
+- Thanks to the Arduino community for their support and resources.
+- Special thanks to contributors who help improve this project.
 
-[Installation]
+## License
 
-Upload Arduino Code (arduino_parking.ino)
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-Handles RFID, servo gates, IR/ultrasonic detection
+## Contact
 
-Sends data to ESP8266 via Serial: ENTRY:UID:slots:slotno or EXIT:UID:slots:-
+For any inquiries or support, please contact Madan R at [your-email@example.com].
 
-Upload ESP8266 Code (esp_parking.ino)
+---
 
-Receives Serial data from Arduino
-
-Sends HTTP request to Google Apps Script Web App
-
-Google Apps Script (Final-Parking)
-
-Logs data to Google Sheet
-
-Sends Gmail with PDF (Ticket/Receipt)
-
-Logs feedback responses
-
-Google Sheets Setup
-
-Log Sheet ID: 1ofg-9cGfbXVbg6lBfyV7j*****************
-
-Feedback Sheet ID: 14PausWOSExNV0K8o*****************
-
-Sheet Names: Logs, Feedback, etc.
-
-
-Email Output
-Entry Email:
-
-PDF Ticket with UID, Entry Time, Slot,
-
-"Welcome" message
-
-Exit Email:
-
-PDF Receipt with UID, Entry Time, Exit Time, Duration, Charge (Rs. 50/10 min) UPI QR code 
-
-![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/36fd43a7e48c4cca31b172fe9532ad7bb446c744/entry-exit-ticket.jpeg)
-
-Thank you Email with feedback and payment confirm:
-
-![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/ce9e93f16c22ae97b4e38d72159a03016cac4adb/thank%20you%20mail.jpeg)
-
-feedback form :
-
-![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/36fd43a7e48c4cca31b172fe9532ad7bb446c744/feedback-form.jpeg)
-
-project image:
-
-![image alt](https://github.com/Madannayak003/IOT-BASED-SMART-PARKING/blob/36fd43a7e48c4cca31b172fe9532ad7bb446c744/project-structure.jpeg)
-
-📽️ Watch Demo Video:
-
-[![Watch Video](https://img.icons8.com/color/96/youtube-play.png)](https://drive.google.com/file/d/10fCxwIr7GQCxG0gdvVvFNceyp6BNLXks/view?usp=drive_link)
-
-[📽️ Watch Demo Video](https://drive.google.com/file/d/10fCxwIr7GQCxG0gdvVvFNceyp6BNLXks/view?usp=drive_link)
-
-
-for knowing RFID CARD ID use this : https://github.com/Madannayak003/RFID_UID-ARDUINO
-
-MIT License © 2025 Madan R
+This README provides a comprehensive overview of the IOT-BASED-SMART-PARKING project. For detailed instructions, code, and updates, please refer to the repository.
